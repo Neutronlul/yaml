@@ -126,10 +126,12 @@ export function stringifyPair(
       const cs = commentString(vcb)
       ws += `\n${indentComment(cs, ctx.indent)}`
     }
-    if (valueStr === '' && !ctx.inFlow) {
-      if (ws === '\n') ws = '\n\n'
-    } else {
+    if (valueStr !== '' || ctx.inFlow) {
       ws += `\n${ctx.indent}`
+    } else if (vsb && !vcb && valueComment) {
+      // Empty value with spaceBefore and comment (not commentBefore)
+      // Add extra newline for the blank line before the comment
+      ws = '\n\n'
     }
   } else if (!explicitKey && isCollection(value)) {
     const vs0 = valueStr[0]
